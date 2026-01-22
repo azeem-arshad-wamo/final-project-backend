@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import { sequelize } from "../../models";
+import { sequelize } from "../db/database.js";
 import bcrypt from "bcrypt";
 
 class User extends Model {}
@@ -46,7 +46,7 @@ User.init(
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
       unique: { msg: "Email is already is use" },
       validate: {
         notNull: { msg: "Email is required" },
@@ -56,14 +56,14 @@ User.init(
     },
     password_hash: {
       type: DataTypes.STRING,
-      notNull: false,
+      allowNull: false,
       validate: {
         notNull: { msg: "Password is required" },
       },
     },
     password: {
       type: DataTypes.VIRTUAL,
-      notNull: true,
+      allowNull: false,
       validate: {
         notNull: { msg: "Password is required" },
         notEmpty: { msg: "Password cannot be empty" },

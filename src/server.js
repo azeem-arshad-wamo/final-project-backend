@@ -2,7 +2,7 @@ import https from "https";
 import app from "./app.js";
 import fs from "fs";
 import "dotenv/config";
-import { connectToDatabase } from "./config/database.js";
+import { connectToDatabase } from "./db/database.js";
 
 const port = process.env.PORT;
 

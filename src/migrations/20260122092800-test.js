@@ -21,7 +21,7 @@ export async function up(queryInterface, Sequelize) {
       notNull: true,
       unique: { msg: "Email is already is use" },
     },
-    password: {
+    password_hash: {
       type: Sequelize.STRING,
       notNull: true,
     },

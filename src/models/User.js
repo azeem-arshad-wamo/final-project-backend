@@ -56,10 +56,7 @@ User.init(
     },
     password_hash: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: { msg: "Password is required" },
-      },
+      allowNull: true,
     },
     password: {
       type: DataTypes.VIRTUAL,
@@ -87,12 +84,12 @@ User.init(
       },
       beforeCreate: async (user) => {
         if (user.password) {
-          user.password_hash = await bcrypt.hash(user.password_hash, 10);
+          user.password_hash = await bcrypt.hash(user.password, 10);
         }
       },
       beforeUpdate: async (user) => {
         if (user.password && user.changed("password")) {
-          user.password_hash = await bcrypt.hash(user.password_hash, 10);
+          user.password_hash = await bcrypt.hash(user.password, 10);
         }
       },
     },

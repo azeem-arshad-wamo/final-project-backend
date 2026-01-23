@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import Post from "../models/Post.js";
+import { Post } from "../models/index.js";
 
 export async function createPost(req, res) {
   try {

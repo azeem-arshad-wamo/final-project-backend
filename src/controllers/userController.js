@@ -1,7 +1,6 @@
 import passport from "passport";
-import User from "../models/User.js";
 import { validationResult } from "express-validator";
-import Post from "../models/Post.js";
+import { User, Post } from "../models/index.js";
 
 export async function createNewUser(req, res) {
   const errors = validationResult(req);

@@ -1,13 +1,12 @@
+import passport from "passport";
 import User from "../models/User.js";
+import { validationResult } from "express-validator";
 
 export async function createNewUser(req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return res.status(400).json({ errors: errors });
   try {
     const { firstName, lastName, email, password } = req.body;
-
-    console.log(`First Name: ${firstName}`);
-    console.log(`Last Name: ${lastName}`);
-    console.log(`Email: ${email}`);
-    console.log(`Password: ${password}`);
 
     if (!firstName || !lastName || !email || !password)
       throw new Error("Incomplete Information");
@@ -27,12 +26,13 @@ export async function createNewUser(req, res) {
       password,
     });
 
-    console.log("RESULT");
-    console.log(result);
-
     res.status(200).json({
       message: "User Created Successfully",
-      user: result,
+      user: {
+        id: result.id,
+        name: result.fullName,
+        email: result.email,
+      },
     });
   } catch (error) {
     res.status(400).json({ message: error.message });

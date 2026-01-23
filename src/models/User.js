@@ -2,7 +2,11 @@ import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../db/database.js";
 import bcrypt from "bcrypt";
 
-class User extends Model {}
+class User extends Model {
+  async comparePassword(password) {
+    return await bcrypt.compare(password, this.password_hash);
+  }
+}
 
 User.init(
   {

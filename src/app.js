@@ -1,10 +1,35 @@
 import express from "express";
 import userRoutes from "./routes/userRoutes.js";
+import passport from "passport";
+import session from "express-session";
+import SequelizeStore from "connect-session-sequelize";
+import "./auth/passport.js";
+import { sequelize } from "./db/database.js";
 
 const app = express();
 
+const SequelizeStoreInstance = new SequelizeStore(session.Store);
+export const sessionStore = new SequelizeStoreInstance({
+  db: sequelize,
+});
+
 app.use(express.json());
+app.use(
+  session({
+    secret: process.env.SECRET_KEY,
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  }),
+);
 app.use("/user", userRoutes);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Works" });

@@ -22,14 +22,17 @@ app.use(
     saveUninitialized: false,
     cookie: {
       secure: true,
-      maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "none",
+      maxAge: 60 * 60 * 1000,
     },
   }),
 );
-app.use("/user", userRoutes);
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use("/user", userRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Works" });

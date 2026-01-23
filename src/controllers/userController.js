@@ -38,3 +38,49 @@ export async function createNewUser(req, res) {
     res.status(400).json({ message: error.message });
   }
 }
+
+export async function getCurrentUserInfo(req, res) {
+  try {
+    if (!req.user) throw new Error("User not found");
+
+    res.status(200).json({
+      message: "success",
+      user: {
+        id: req.user.id,
+        fullName: req.user.fullName,
+        email: req.user.email,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
+export async function logOutUser(req, res) {
+  try {
+    req.logout((error) => {
+      if (error) {
+        return res.status(500).json({ message: "Logout Failed" });
+      }
+
+      req.session.destroy((error) => {
+        if (error) {
+          return res
+            .status(500)
+            .json({ message: "Session Destruction Failed" });
+        }
+
+        res.clearCookie("connect.sid", {
+          path: "/",
+          secure: true,
+          httpOnly: true,
+          sameSite: "none",
+        });
+
+        return res.status(200).json({ message: "Logged Out Successfully" });
+      });
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}

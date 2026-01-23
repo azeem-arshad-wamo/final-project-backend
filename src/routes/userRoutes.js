@@ -1,10 +1,19 @@
 import { Router } from "express";
 import { body, validationResult } from "express-validator";
-import { createNewUser } from "../controllers/userController.js";
+import {
+  createNewUser,
+  getCurrentUserInfo,
+  logOutUser,
+} from "../controllers/userController.js";
 import passport from "passport";
-import { validateRequest } from "../middlewares/userMiddleware.js";
+import {
+  authenticateUser,
+  validateRequest,
+} from "../middlewares/userMiddleware.js";
 
 const router = Router();
+
+router.get("/", authenticateUser, getCurrentUserInfo);
 
 router.post(
   "/",
@@ -74,5 +83,7 @@ router.post(
     }
   },
 );
+
+router.get("/logout", authenticateUser, logOutUser);
 
 export default router;

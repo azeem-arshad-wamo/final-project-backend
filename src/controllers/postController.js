@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { Post } from "../models/index.js";
+import { Post, User } from "../models/index.js";
 
 export async function createPost(req, res) {
   try {
@@ -35,5 +35,37 @@ export async function createPost(req, res) {
     res.status(200).json({ result });
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+}
+
+export async function getCurrentUserPosts(req, res) {
+  try {
+    if (!req.user) {
+      res.status(400).json({
+        message: "Could not find current logged in user",
+      });
+    }
+
+    const posts = await Post.findAll({
+      where: {
+        userId: req.user.id,
+      },
+    });
+
+    if (!posts) {
+      res
+        .status(400)
+        .json({ message: "Could not find posts for current user" });
+    }
+
+    res.status(200).json({
+      currentUser: req.user.fullName,
+      posts: posts,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Error fetching current logged in user posts",
+      error: error.message,
+    });
   }
 }

@@ -1,12 +1,13 @@
 import { Router } from "express";
 import { authenticateUser } from "../middlewares/userMiddleware.js";
-import { createPost } from "../controllers/postController.js";
+import {
+  createPost,
+  getCurrentUserPosts,
+} from "../controllers/postController.js";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.json({ message: "Post Route Working" });
-});
+router.get("/", authenticateUser, getCurrentUserPosts);
 
 router.post("/", authenticateUser, createPost);
 

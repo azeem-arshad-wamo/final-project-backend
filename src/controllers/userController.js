@@ -1,6 +1,7 @@
 import passport from "passport";
 import User from "../models/User.js";
 import { validationResult } from "express-validator";
+import Post from "../models/Post.js";
 
 export async function createNewUser(req, res) {
   const errors = validationResult(req);
@@ -43,13 +44,23 @@ export async function getCurrentUserInfo(req, res) {
   try {
     if (!req.user) throw new Error("User not found");
 
+    const user = await User.findOne({
+      where: {
+        id: req.user.id,
+      },
+      include: {
+        model: Post,
+        as: "posts",
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Cannot find user " });
+    }
+
     res.status(200).json({
       message: "success",
-      user: {
-        id: req.user.id,
-        fullName: req.user.fullName,
-        email: req.user.email,
-      },
+      user: user,
     });
   } catch (error) {
     res.status(400).json({ error: error.message });

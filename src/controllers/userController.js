@@ -59,7 +59,12 @@ export async function getCurrentUserInfo(req, res) {
 
     res.status(200).json({
       message: "success",
-      user: user,
+      user: {
+        id: user.id,
+        fullName: user.fullname,
+        email: user.fullName,
+      },
+      posts: user.posts,
     });
   } catch (error) {
     res.status(400).json({ error: error.message });

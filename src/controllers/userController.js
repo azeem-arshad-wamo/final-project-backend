@@ -26,13 +26,20 @@ export async function createNewUser(req, res) {
       password,
     });
 
-    res.status(200).json({
-      message: "User Created Successfully",
-      user: {
-        id: result.id,
-        name: result.fullName,
-        email: result.email,
-      },
+    req.login(result, (err) => {
+      if (err) {
+        console.error("Login after signup failed:", err);
+        return res.status(500).json({ message: "Login failed after signup" });
+      }
+
+      return res.status(200).json({
+        message: "User Created Successfully",
+        user: {
+          id: result.id,
+          fullName: result.fullName,
+          email: result.email,
+        },
+      });
     });
   } catch (error) {
     res.status(400).json({ message: error.message });

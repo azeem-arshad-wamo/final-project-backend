@@ -61,8 +61,8 @@ export async function getCurrentUserInfo(req, res) {
       message: "success",
       user: {
         id: user.id,
-        fullName: user.fullname,
-        email: user.fullName,
+        fullName: user.fullName,
+        email: user.email,
       },
       posts: user.posts,
     });

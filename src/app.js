@@ -5,6 +5,7 @@ import passport from "passport";
 import session from "express-session";
 import SequelizeStore from "connect-session-sequelize";
 import "./auth/passport.js";
+import cors from "cors";
 import { sequelize } from "./db/database.js";
 
 const app = express();
@@ -16,15 +17,21 @@ export const sessionStore = new SequelizeStoreInstance({
 
 app.use(express.json());
 app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
+app.use(
   session({
     secret: process.env.SECRET_KEY,
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: true,
+      secure: false,
       httpOnly: true,
-      sameSite: "none",
+      sameSite: "lax",
       maxAge: 60 * 60 * 1000,
     },
   }),

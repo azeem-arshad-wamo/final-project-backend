@@ -69,3 +69,31 @@ export async function getCurrentUserPosts(req, res) {
     });
   }
 }
+
+export async function getPostById(req, res) {
+  try {
+    const id = req.query.id;
+
+    console.log(`Id: ${id}`);
+    console.log("request received");
+
+    if (!id) throw new Error("Id not provided");
+
+    const post = await Post.findByPk(id);
+    console.log("POST");
+    console.log(post.dataValues);
+
+    if (!post) throw new Error("Could not find post for that id");
+
+    res.status(200).json({
+      id: post.id,
+      userId: post.userId,
+      blocks: post.blocks,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Error fetching post",
+      error: error.message,
+    });
+  }
+}

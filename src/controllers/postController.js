@@ -87,6 +87,7 @@ export async function getPostById(req, res) {
 
     res.status(200).json({
       id: post.id,
+      title: post.title,
       userId: post.userId,
       blocks: post.blocks,
     });

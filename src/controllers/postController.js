@@ -107,14 +107,9 @@ export async function getPostById(req, res) {
   try {
     const id = req.query.id;
 
-    console.log(`Id: ${id}`);
-    console.log("request received");
-
     if (!id) throw new Error("Id not provided");
 
     const post = await Post.findByPk(id);
-    console.log("POST");
-    console.log(post.dataValues);
 
     if (!post) throw new Error("Could not find post for that id");
 

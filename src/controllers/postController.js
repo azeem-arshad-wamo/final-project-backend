@@ -3,11 +3,29 @@ import { Post, User } from "../models/index.js";
 
 export async function fetchAllPosts(req, res) {
   try {
-    const posts = await Post.findAll();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const offset = (page - 1) * limit;
+
+    const { rows: posts, count: total } = await Post.findAndCountAll({
+      limit,
+      offset,
+      order: [["createdAt", "DESC"]],
+    });
 
     if (!posts) res.status(400).json({ message: "Cannot find posts" });
 
-    res.status(200).json(posts);
+    const totalPages = Math.ceil(total / limit);
+
+    res.status(200).json({
+      posts,
+      pagination: {
+        total,
+        totalPages,
+        currentPage: page,
+        perPage: limit,
+      },
+    });
   } catch (error) {
     res.status(400).json({
       message: "Couldn't fetch user information",

@@ -4,7 +4,8 @@ export async function fetchCommentsByPostId(req, res) {
   try {
     const id = req.params.id;
 
-    if (!id) res.status(400).json({ message: "Please provide a valid id" });
+    if (!id)
+      return res.status(400).json({ message: "Please provide a valid id" });
 
     const comments = await Comment.findAll({
       where: {
@@ -12,7 +13,8 @@ export async function fetchCommentsByPostId(req, res) {
       },
     });
 
-    if (!comments) res.status(200).json({ message: "Couldn't find comments" });
+    if (!comments)
+      return res.status(200).json({ message: "Couldn't find comments" });
 
     res.status(200).json(comments);
   } catch (error) {
@@ -49,5 +51,30 @@ export async function createNewComment(req, res) {
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ message: "Could not create a comment" });
+  }
+}
+
+export async function fetchCurrentUserComments(req, res) {
+  try {
+    const userId = req.user.id;
+
+    if (!userId) throw new Error("User not logged in");
+
+    const comments = await Comment.findAll({
+      where: {
+        userId: userId,
+      },
+      include: {
+        model: Post,
+        as: "post",
+        attributes: ["id", "title"],
+      },
+    });
+
+    if (!comments.length) throw new Error("Couldn't find comments");
+
+    res.status(200).json(comments);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 }

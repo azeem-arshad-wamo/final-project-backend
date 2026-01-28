@@ -2,15 +2,16 @@ import { Router } from "express";
 import {
   createNewComment,
   fetchCommentsByPostId,
+  fetchCurrentUserComments,
 } from "../controllers/commentController.js";
 import { authenticateUser } from "../middlewares/userMiddleware.js";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.json("YEAH");
-});
+// GET /comments
+router.get("/", authenticateUser, fetchCurrentUserComments);
 
+// GET /comments/:id
 router.get("/:id", fetchCommentsByPostId);
 
 // POST /comment

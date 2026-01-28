@@ -1,4 +1,4 @@
-import { Post } from "../models/index.js";
+import { Comment, Post } from "../models/index.js";
 
 export async function fetchAllPosts(req, res) {
   try {
@@ -108,7 +108,12 @@ export async function getPostById(req, res) {
 
     if (!id) throw new Error("Id not provided");
 
-    const post = await Post.findByPk(id);
+    const post = await Post.findByPk(id, {
+      include: {
+        model: Comment,
+        as: "comments",
+      },
+    });
 
     if (!post) throw new Error("Could not find post for that id");
 
@@ -117,6 +122,7 @@ export async function getPostById(req, res) {
       title: post.title,
       userId: post.userId,
       blocks: post.blocks,
+      comments: post.comments,
     });
   } catch (error) {
     res.status(400).json({

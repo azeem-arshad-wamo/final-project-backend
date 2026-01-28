@@ -1,6 +1,21 @@
 import { Op } from "sequelize";
 import { Post, User } from "../models/index.js";
 
+export async function fetchAllPosts(req, res) {
+  try {
+    const posts = await Post.findAll();
+
+    if (!posts) res.status(400).json({ message: "Cannot find posts" });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(400).json({
+      message: "Couldn't fetch user information",
+      error: error.message,
+    });
+  }
+}
+
 export async function createPost(req, res) {
   try {
     const { title, blocks } = req.body;

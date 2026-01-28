@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authenticateUser } from "../middlewares/userMiddleware.js";
 import {
   createPost,
+  fetchAllPosts,
   getCurrentUserPosts,
   getPostById,
 } from "../controllers/postController.js";
@@ -16,5 +17,8 @@ router.post("/", authenticateUser, createPost);
 
 // GET /post/view
 router.get("/view", getPostById);
+
+// GET /post/view/all
+router.get("/view/all", fetchAllPosts);
 
 export default router;

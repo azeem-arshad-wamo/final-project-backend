@@ -3,25 +3,28 @@ import { faker } from "@faker-js/faker";
 
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
-  const users = await queryInterface.sequelize.query(`SELECT id from "Users";`);
+  const users = await queryInterface.sequelize.query(`SELECT id FROM "Users";`);
   const userRows = users[0];
 
-  const posts = await queryInterface.sequelize.query(`SELECT id from "Posts";`);
+  const posts = await queryInterface.sequelize.query(`SELECT id FROM "Posts";`);
   const postRows = posts[0];
 
   const comments = [];
 
-  for (let i = 0; i < 50; i++) {
-    const randomUser = faker.helpers.arrayElement(userRows);
-    const randomPost = faker.helpers.arrayElement(postRows);
+  for (const post of postRows) {
+    const numberOfComments = faker.number.int({ min: 1, max: 5 });
 
-    comments.push({
-      userId: randomUser.id,
-      postId: randomPost.id,
-      content: faker.lorem.sentences(faker.number.int({ min: 1, max: 5 })),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
+    for (let i = 0; i < numberOfComments; i++) {
+      const randomUser = faker.helpers.arrayElement(userRows);
+
+      comments.push({
+        postId: post.id,
+        userId: randomUser.id,
+        content: faker.lorem.sentences(faker.number.int({ min: 1, max: 3 })),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+    }
   }
 
   await queryInterface.bulkInsert("Comments", comments, {});

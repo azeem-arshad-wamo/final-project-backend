@@ -5,12 +5,12 @@ import { faker } from "@faker-js/faker";
 export async function up(queryInterface, Sequelize) {
   const users = [];
 
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 40; i++) {
     users.push({
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
-      email: faker.internet.email(),
-      password_hash: "$2b$10$dummyhashfornow", // bcrypt hash placeholder
+      email: faker.internet.email().toLowerCase(),
+      password_hash: faker.internet.password(10),
       createdAt: new Date(),
       updatedAt: new Date(),
     });

@@ -3,15 +3,13 @@ import { faker } from "@faker-js/faker";
 
 /** @type {import('sequelize-cli').Migration} */
 export async function up(queryInterface, Sequelize) {
-  const users = await queryInterface.sequelize.query(`SELECT id from "Users";`);
+  const users = await queryInterface.sequelize.query(`SELECT id FROM "Users";`);
   const userRows = users[0];
 
   const posts = [];
-
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 150; i++) {
     const randomUser = faker.helpers.arrayElement(userRows);
 
-    // Generate realistic blocks like frontend expects
     const blocks = [
       { type: "heading", data: faker.lorem.sentence() },
       { type: "sub-heading", data: faker.lorem.sentence() },
@@ -21,14 +19,14 @@ export async function up(queryInterface, Sequelize) {
       },
       {
         type: "image",
-        data: faker.image.urlPicsumPhotos({ width: 640, height: 480 }),
+        data: `https://picsum.photos/1200/800?random=${faker.number.int({ min: 1, max: 10000 })}`,
       },
     ];
 
     posts.push({
       userId: randomUser.id,
       title: faker.lorem.sentence(),
-      blocks: JSON.stringify(blocks), // <- crucial fix
+      blocks: JSON.stringify(blocks),
       createdAt: new Date(),
       updatedAt: new Date(),
     });

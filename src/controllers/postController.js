@@ -10,7 +10,7 @@ export async function fetchAllPosts(req, res) {
     const { rows: posts, count: total } = await Post.findAndCountAll({
       limit,
       offset,
-      order: [["createdAt", "DESC"]],
+      order: [["id", "ASC"]],
     });
 
     if (!posts) res.status(400).json({ message: "Cannot find posts" });

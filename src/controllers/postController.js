@@ -1,5 +1,4 @@
-import { Op } from "sequelize";
-import { Post, User } from "../models/index.js";
+import { Post } from "../models/index.js";
 
 export async function fetchAllPosts(req, res) {
   try {

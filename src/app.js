@@ -1,6 +1,7 @@
 import express from "express";
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
 import passport from "passport";
 import session from "express-session";
 import SequelizeStore from "connect-session-sequelize";
@@ -42,6 +43,7 @@ app.use(passport.session());
 
 app.use("/user", userRoutes);
 app.use("/post", postRoutes);
+app.use("/comment", commentRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Works" });

@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { fetchCommentsByPostId } from "../controllers/commentController.js";
+import {
+  createNewComment,
+  fetchCommentsByPostId,
+} from "../controllers/commentController.js";
+import { authenticateUser } from "../middlewares/userMiddleware.js";
 
 const router = Router();
 
@@ -8,5 +12,8 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", fetchCommentsByPostId);
+
+// POST /comment
+router.post("/", authenticateUser, createNewComment);
 
 export default router;

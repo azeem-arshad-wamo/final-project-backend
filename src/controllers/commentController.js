@@ -1,4 +1,4 @@
-import { Comment, Post } from "../models/index.js";
+import { Comment, Post, User } from "../models/index.js";
 
 export async function fetchCommentsByPostId(req, res) {
   try {
@@ -10,6 +10,10 @@ export async function fetchCommentsByPostId(req, res) {
     const comments = await Comment.findAll({
       where: {
         postId: id,
+      },
+      include: {
+        model: User,
+        as: "author",
       },
     });
 

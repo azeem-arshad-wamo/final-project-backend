@@ -131,3 +131,21 @@ export async function getPostById(req, res) {
     });
   }
 }
+
+export async function deletePostById(req, res) {
+  try {
+    const id = req.params.id;
+
+    if (!id) throw new Error("Provide a valid ID please");
+
+    const post = await Post.findByPk(id);
+
+    if (!post) throw new Error("Could not find a post by that Id");
+
+    await post.destroy();
+
+    res.status(200).json({ message: "Success" });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}

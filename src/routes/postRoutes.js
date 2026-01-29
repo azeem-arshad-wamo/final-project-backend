@@ -6,6 +6,7 @@ import {
   fetchAllPosts,
   getCurrentUserPosts,
   getPostById,
+  updatePost,
 } from "../controllers/postController.js";
 
 const router = Router();
@@ -24,5 +25,8 @@ router.get("/view/all", fetchAllPosts);
 
 // DELETE /post
 router.delete("/:id", authenticateUser, deletePostById);
+
+// PATCH /post
+router.patch("/", authenticateUser, updatePost);
 
 export default router;

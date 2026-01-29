@@ -33,6 +33,38 @@ export async function fetchAllPosts(req, res) {
   }
 }
 
+export async function updatePost(req, res) {
+  try {
+    const { postId, title, blocks } = req.body;
+    const user = req.user;
+
+    if (!title || !blocks) {
+      return res.status(400).json({ message: "Incomplete Information" });
+    }
+
+    if (!user) {
+      return res.status(500).json({ message: "User not found" });
+    }
+
+    const post = await Post.findByPk(postId);
+
+    if (!post) {
+      return res
+        .status(400)
+        .json({ message: "Could not find post by that id" });
+    }
+
+    post.title = title;
+    post.blocks = blocks;
+
+    await post.save();
+
+    return res.status(200).json({ message: "Post Updated" });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
 export async function createPost(req, res) {
   try {
     const { title, blocks } = req.body;

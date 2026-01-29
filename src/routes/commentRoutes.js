@@ -3,6 +3,7 @@ import {
   createNewComment,
   fetchCommentsByPostId,
   fetchCurrentUserComments,
+  updateComment,
 } from "../controllers/commentController.js";
 import { authenticateUser } from "../middlewares/userMiddleware.js";
 
@@ -16,5 +17,8 @@ router.get("/:id", fetchCommentsByPostId);
 
 // POST /comment
 router.post("/", authenticateUser, createNewComment);
+
+// PATCH /comment
+router.patch("/", authenticateUser, updateComment);
 
 export default router;

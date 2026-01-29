@@ -78,3 +78,30 @@ export async function fetchCurrentUserComments(req, res) {
     res.status(400).json({ message: error.message });
   }
 }
+
+export async function updateComment(req, res) {
+  try {
+    const { commentId, postId, content } = req.body;
+    const userId = req.user.id;
+
+    if (!postId || !content) throw new Error("Incomplete Information");
+    if (!userId) throw new Error("User not logged in!");
+
+    const comment = await Comment.findOne({
+      where: {
+        id: commentId,
+        postId: postId,
+      },
+    });
+
+    if (!comment) throw new Error("Cannot find comment with that information");
+
+    comment.content = content;
+
+    await comment.save();
+
+    res.status(200).json(comment);
+  } catch (error) {
+    res.status(200).json({ message: error.message });
+  }
+}

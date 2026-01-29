@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createNewComment,
+  deleteComment,
   fetchCommentsByPostId,
   fetchCurrentUserComments,
   updateComment,
@@ -20,5 +21,8 @@ router.post("/", authenticateUser, createNewComment);
 
 // PATCH /comment
 router.patch("/", authenticateUser, updateComment);
+
+// DELETE /comment/:id
+router.delete("/:id", authenticateUser, deleteComment);
 
 export default router;

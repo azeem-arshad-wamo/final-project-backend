@@ -105,3 +105,21 @@ export async function updateComment(req, res) {
     res.status(200).json({ message: error.message });
   }
 }
+
+export async function deleteComment(req, res) {
+  try {
+    const id = req.params.id;
+
+    if (!id) throw new Error("Cannot not delete a post without id");
+
+    await Comment.destroy({
+      where: {
+        id: id,
+      },
+    });
+
+    res.status(200).json({ message: "Success" });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
